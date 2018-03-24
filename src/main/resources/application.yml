@@ -1,0 +1,7 @@
+server:
+  servlet:
+    context-path: /wsells
+logging:
+  pattern:
+    console: "%d  - %msg%n"
+  path: /myspace/java/workspace/w-sell-s/logs
