@@ -1,7 +1,11 @@
 server:
   servlet:
     context-path: /wsells
-logging:
-  pattern:
-    console: "%d  - %msg%n"
-  path: /myspace/java/workspace/w-sell-s/logs
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: 123456
+    url: jdbc:mysql://192.168.3.30/wsells?characterEncoding=utf-8&useSSL=false
+  jpa:
+    show-sql: true
