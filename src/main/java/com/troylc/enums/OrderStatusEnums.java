@@ -7,7 +7,7 @@ import lombok.Getter;
  * Created by troylc on 2018/3/28.
  */
 @Getter
-public enum OrderStatusEnums {
+public enum OrderStatusEnums implements CodeEnums<Integer> {
     NEW(0, "新订单"),
     FINISH(1, "完成订单"),
     CANCEL(2, "取消订单");
