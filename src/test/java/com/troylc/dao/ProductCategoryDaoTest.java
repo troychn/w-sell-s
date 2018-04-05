@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
+ * 商品分类dao层测试
  * Created by troylc on 2018/3/25.
  */
 @RunWith(SpringRunner.class)

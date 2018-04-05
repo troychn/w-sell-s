@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * 商品分类业务处理层测试
  * Created by troylc on 2018/3/26.
  */
 @RunWith(SpringRunner.class)

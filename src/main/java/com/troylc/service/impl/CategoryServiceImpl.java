@@ -9,13 +9,18 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
+ * 商品类目业务服务层
  * Created by troylc on 2018/3/26.
  */
 @Service
 public class CategoryServiceImpl implements ICategoryService {
 
+    private final ProductCategoryDao productCategoryDao;
+
     @Autowired
-    private ProductCategoryDao productCategoryDao;
+    public CategoryServiceImpl(ProductCategoryDao productCategoryDao) {
+        this.productCategoryDao = productCategoryDao;
+    }
 
     /**
      * 根据ID查询目录对象
