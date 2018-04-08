@@ -7,7 +7,7 @@ import lombok.Getter;
  * Created by troylc on 2018/3/27.
  */
 @Getter
-public enum ProductStatusEnum {
+public enum ProductStatusEnums {
 
     UP(0, "在售"),
     DOWN(1,"下架");
@@ -16,7 +16,7 @@ public enum ProductStatusEnum {
 
     private String message;
 
-    ProductStatusEnum(Integer code, String message) {
+    ProductStatusEnums(Integer code, String message) {
         this.code = code;
         this.message = message;
     }

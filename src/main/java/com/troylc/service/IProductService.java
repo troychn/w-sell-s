@@ -1,5 +1,6 @@
 package com.troylc.service;
 
+import com.troylc.dto.CartDTO;
 import com.troylc.entity.ProductInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,8 +25,24 @@ public interface IProductService {
 
     ProductInfo save(ProductInfo productInfo);
 
-    //加库存
+    /**
+     * 减少库存.
+     */
+    void decreaseStock(List<CartDTO> cartDTOList);
 
-    //减库存
+    /**
+     * 增加库存.
+     */
+    void increaseStock(List<CartDTO> cartDTOList);
+
+    /**
+     * 商品下架.
+     */
+    ProductInfo offSafe(ProductInfo productInfo);
+
+    /**
+     * 商品上架.
+     */
+    ProductInfo onSafe(ProductInfo productInfo);
 
 }

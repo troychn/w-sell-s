@@ -46,7 +46,7 @@ public class ProductServiceImplTest {
 
     @Test
     public void save() throws Exception {
-        ProductInfo productInfo = new ProductInfo("2345678", "叉车", new BigDecimal(1200.00),
+        ProductInfo productInfo = new ProductInfo("3456789", "拖拉车", new BigDecimal(1230.00),
                 10, "叉车中的战斗机", "http://XXXXXX.jpg", 1, 10);
         ProductInfo result = productService.save(productInfo);
         Assert.assertNotNull(result);

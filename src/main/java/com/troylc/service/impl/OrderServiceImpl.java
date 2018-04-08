@@ -2,13 +2,14 @@ package com.troylc.service.impl;
 
 import com.troylc.dao.OrderDetailDao;
 import com.troylc.dao.OrderMasterDao;
+import com.troylc.dto.CartDTO;
 import com.troylc.dto.OrderDTO;
 import com.troylc.entity.OrderDetail;
 import com.troylc.entity.OrderMaster;
 import com.troylc.entity.ProductInfo;
-import com.troylc.enums.ResultEnums;
 import com.troylc.enums.OrderStatusEnums;
 import com.troylc.enums.PayStatusEnums;
+import com.troylc.enums.ResultEnums;
 import com.troylc.exception.WSellSException;
 import com.troylc.service.IOrderService;
 import com.troylc.service.IProductService;
@@ -22,6 +23,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 订单业务逻辑处理类
@@ -31,15 +34,18 @@ import java.math.BigDecimal;
 @Slf4j
 public class OrderServiceImpl implements IOrderService {
 
-    @Autowired
-    private IProductService productService;
+    private final IProductService productService;
+
+    private final OrderDetailDao orderDetailDao;
+
+    private final OrderMasterDao orderMasterDao;
 
     @Autowired
-    private OrderDetailDao orderDetailDao;
-
-    @Autowired
-    private OrderMasterDao orderMasterDao;
-
+    public OrderServiceImpl(IProductService productService, OrderDetailDao orderDetailDao, OrderMasterDao orderMasterDao) {
+        this.productService = productService;
+        this.orderDetailDao = orderDetailDao;
+        this.orderMasterDao = orderMasterDao;
+    }
 
 
     /**
@@ -67,7 +73,7 @@ public class OrderServiceImpl implements IOrderService {
                     .multiply(new BigDecimal(orderDetail.getProductQuantity()))
                     .add(orderAmount);
             //3.订单详情入库
-            BeanUtils.copyProperties(productInfo, orderDetail);
+            BeanUtils.copyProperties(productInfo, orderDetail); //对象属性拷贝
             orderDetail.setDetailId(KeyUtils.gen());
             orderDetail.setOrderId(orderId);
             orderDetailDao.save(orderDetail);
@@ -76,12 +82,20 @@ public class OrderServiceImpl implements IOrderService {
         //3.写入订单(orderMaster和orderDetail)
         OrderMaster orderMaster = new OrderMaster();
         orderDTO.setOrderId(orderId);
-        BeanUtils.copyProperties(orderDTO, orderMaster);
+        BeanUtils.copyProperties(orderDTO, orderMaster);  //对象复制需放到设置变量值之前
         orderMaster.setOrderAmount(orderAmount);
         orderMaster.setOrderStatus(OrderStatusEnums.NEW.getCode());
         orderMaster.setPayStatus(PayStatusEnums.NEW.getCode());
         orderMasterDao.save(orderMaster);
 
+        //4.出库
+        List<CartDTO> cartDTOList = orderDTO.getOrderDetailList().stream()
+                .map(e -> new CartDTO(e.getProductId(), e.getProductQuantity()))
+                .collect(Collectors.toList());
+        productService.decreaseStock(cartDTOList);
+
+        //websock消息通知
+        //webSocketService.sendMessage(orderDTO.getOrderId());
 
         return orderDTO;
     }
